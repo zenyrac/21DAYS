@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21-Day Quantum Leap Challenge</title>
+    <style>
+        :root {
+            /* Light Theme */
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --primary-dark: #5649c0;
+            --success: #00d1b2;
+            --success-light: #55efc4;
+            --danger: #ff7675;
+            --danger-light: #ff9e9e;
+            --warning: #fdcb6e;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --bg: rgba(245, 247, 250, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            --toggle-bg: rgba(220, 220, 220, 0.6);
+            --neumorphic-shadow: 8px 8px 15px rgba(163, 177, 198, 0.3), -8px -8px 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .dark-mode {
+            /* Dark Theme */
+            --primary: #a29bfe;
+            --primary-light: #6c5ce7;
+            --primary-dark: #5649c0;
+            --success: #00d1b2;
+            --success-light: #55efc4;
+            --danger: #ff7675;
+            --danger-light: #ff9e9e;
+            --warning: #fdcb6e;
+            --text: #f5f7fa;
+            --text-light: #dfe6e9;
+            --bg: rgba(20, 20, 30, 0.8);
+            --card-bg: rgba(30, 30, 40, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --toggle-bg: rgba(60, 60, 70, 0.6);
+            --neumorphic-shadow: 8px 8px 15px rgba(0, 0, 0, 0.3), -8px -8px 15px rgba(50, 50, 60, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-attachment: fixed;
+            background-size: cover;
+            transition: all 0.5s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        /* Circular Progress */
+        .circular-toggle {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+
+        .circular-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0%, var(--toggle-bg) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.5s ease;
+        }
+
+        .circular-inner {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+        }
+
+        .days-left {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .days-text {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .toggle-status {
+            position: absolute;
+            bottom: -30px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .day-pill {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .day-pill.completed {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .day-pill.current {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .day-pill.failed {
+            background: linear-gradient(135deg, var(--danger), var(--danger-light));
+            color: white;
+        }
+
+        .day-pill.locked {
+            background: var(--card-bg);
+            color: var(--text-light);
+            cursor: not-allowed;
+            box-shadow: var(--neumorphic-shadow);
+        }
+
+        .day-pill.locked::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 25px;
+            height: 25px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            box-shadow: var(--neumorphic-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .day-pill.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            z-index: 3;
+        }
+
+        .day-pill.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.7rem;
+            background: white;
+            color: var(--success);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .day-pill.failed::after {
+            content: '✗';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.7rem;
+            background: white;
+            color: var(--danger);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .core-habits {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .core-habits:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .core-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .core-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .core-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .core-list {
+            list-style-type: none;
+        }
+
+        .core-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed var(--glass-border);
+            cursor: pointer;
+        }
+
+        .core-item:last-child {
+            border-bottom: none;
+        }
+
+        .core-item i {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .core-item.completed i {
+            color: var(--success);
+        }
+
+        .core-item.failed i {
+            color: var(--danger);
+        }
+
+        .task-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .task-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .task-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .task-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .task-day {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .task-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .task-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--primary);
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .task-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .task-toggle {
+            width: 50px;
+            height: 26px;
+            background: var(--toggle-bg);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .task-toggle.active {
+            background: var(--success);
+        }
+
+        .task-toggle.failed {
+            background: var(--danger);
+        }
+
+        .task-toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-toggle.active::after {
+            left: calc(100% - 23px);
+        }
+
+        .quote-container {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .quote {
+            font-size: 1.3rem;
+            color: var(--text);
+            font-style: italic;
+            position: relative;
+            padding: 0 2rem;
+            line-height: 1.6;
+        }
+
+        .quote::before,
+        .quote::after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary-light);
+            opacity: 0.3;
+            position: absolute;
+            line-height: 0;
+        }
+
+        .quote::before {
+            top: 30px;
+            left: 0;
+        }
+
+        .quote::after {
+            bottom: -10px;
+            right: 0;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .celebration.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .celebration h2 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .celebration p {
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .days-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .circular-toggle {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .circular-inner {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .days-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            body {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .circular-toggle {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .circular-inner {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .days-left {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+        </div>
+
+        <div class="header">
+            <h1>21-Day Quantum Leap Challenge</h1>
+            <p>Transform your life with atomic habits. Each completed day brings you closer to your best self.</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="circular-toggle" id="circularToggle">
+                <div class="circular-bg">
+                    <div class="circular-inner">
+                        <div class="days-left" id="daysLeft">21</div>
+                        <div class="days-text">days left</div>
+                    </div>
+                </div>
+                <div class="toggle-status">Challenge Active</div>
+            </div>
+        </div>
+
+        <div class="days-grid" id="daysGrid">
+            <!-- Days will be dynamically generated -->
+        </div>
+
+        <div class="core-habits">
+            <div class="core-header">
+                <h3 class="core-title">✊🏻 CORE HABITS (Repeat Every Day; Click to toggle)</h3>
+                <span class="task-day">Non-Negotiables</span>
+            </div>
+            <ul class="core-list" id="coreHabitsList">
+                <li class="core-item" data-habit="nophone">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>No phone for the first 60 minutes after waking</span>
+                </li>
+                <li class="core-item" data-habit="read">
+                    <i class="fas fa-book"></i>
+                    <span>Read for 10 minutes</span>
+                </li>
+                <li class="core-item" data-habit="meditate">
+                    <i class="fas fa-spa"></i>
+                    <span>5-minute silence / breathing</span>
+                </li>
+                <li class="core-item" data-habit="move">
+                    <i class="fas fa-running"></i>
+                    <span>15 minutes movement (walk, stretch, gym, etc.)</span>
+                </li>
+                <li class="core-item" data-habit="journal">
+                    <i class="fas fa-pen"></i>
+                    <span>Journal 1 line: "What is my ONE focus today?"</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="task-card active" id="currentDayTask">
+            <!-- Current day's task will be loaded here -->
+        </div>
+
+        <div class="quote-container">
+            <p class="quote" id="dailyQuote">
+                You don't have to be great to start, but you have to start to be great. Day 1 is your foundation.
+            </p>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <h2 id="celebrationTitle">DAY COMPLETED! <i class="fas fa-check-circle"></i></h2>
+        <p id="celebrationText">You're one step closer to your best self!</p>
+    </div>
+
+    <script>
+        // ========== CHALLENGE DATA ========== //
+        const challengeData = {
+            startDate: null, // Will be set on first load
+            currentDay: 1,
+            completedDays: [],
+            failedDays: [],
+            coreHabits: {
+                nophone: { completed: false, failed: false },
+                read: { completed: false, failed: false },
+                meditate: { completed: false, failed: false },
+                move: { completed: false, failed: false },
+                journal: { completed: false, failed: false }
+            },
+            dailyChallenges: [
+                "Delete 3 time-wasting apps",
+                "Do 10 push-ups or 1 cold face splash",
+                "Organize your phone's home screen",
+                "Speak to no one for 2 hours",
+                "Compliment a stranger or text someone you admire",
+                "Fast from sugar for a day",
+                "Go for a walk without headphones",
+                "Write your 3 biggest goals in life",
+                "Watch the sunset or sunrise",
+                "Take a photo of something beautiful and post it",
+                "Call someone older and ask about life lessons",
+                "Plan tomorrow in 5 bullet points",
+                "Turn off your phone for 4 hours straight",
+                "List 5 things you're grateful for right now",
+                "Face discomfort: cold water, extra gym rep, rejection — anything",
+                "Meditate for 10 minutes using YouTube guide",
+                "Create a 'NO list' — things you won't do anymore",
+                "Speak your future identity in front of a mirror",
+                "Sleep without phone in the room",
+                "Write a letter to your future self (Day 90 version)",
+                "Burn/tear a paper of all your past limiting beliefs"
+            ],
+            dailyQuotes: [
+                "Day 1: The journey of a thousand miles begins with a single step.",
+                "Day 2: Discipline is choosing between what you want now and what you want most.",
+                "Day 3: Small daily improvements lead to stunning results.",
+                "Day 4: You are what you repeatedly do. Excellence is not an act, but a habit.",
+                "Day 5: The secret of getting ahead is getting started.",
+                "Day 6: Success is the sum of small efforts repeated day in and day out.",
+                "Day 7: The only bad workout is the one that didn't happen.",
+                "Day 8: Goals are dreams with deadlines.",
+                "Day 9: Morning is when the magic happens. Own your mornings, own your life.",
+                "Day 10: Gratitude turns what we have into enough.",
+                "Day 11: The best way to predict your future is to create it.",
+                "Day 12: Failing to plan is planning to fail.",
+                "Day 13: Disconnect to reconnect with yourself.",
+                "Day 14: Gratitude is the healthiest of all human emotions.",
+                "Day 15: Get comfortable being uncomfortable.",
+                "Day 16: Meditation is not about stopping thoughts, but recognizing we are more than our thoughts.",
+                "Day 17: What you don't say 'no' to determines what you say 'yes' to.",
+                "Day 18: Speak your future into existence.",
+                "Day 19: Your bedroom is for two things: sleep and sex. Nothing else.",
+                "Day 20: Your future self is watching you right now through memories.",
+                "Day 21: The first step toward change is awareness. The second step is acceptance."
+            ]
+        };
+
+        // ========== INITIALIZE CHALLENGE ========== //
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChallengeData();
+            renderChallenge();
+            setupEventListeners();
+        });
+
+        // ========== LOCAL STORAGE HANDLING ========== //
+        function loadChallengeData() {
+            const savedData = localStorage.getItem('quantumLeapChallenge');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                challengeData.startDate = new Date(parsedData.startDate);
+                challengeData.currentDay = parsedData.currentDay;
+                challengeData.completedDays = parsedData.completedDays;
+                challengeData.failedDays = parsedData.failedDays;
+                challengeData.coreHabits = parsedData.coreHabits;
+                
+                // Check if a new day has arrived
+                checkDayProgression();
+            } else {
+                // First-time user - set start date to today
+                challengeData.startDate = new Date();
+                saveChallengeData();
+            }
+        }
+
+        function saveChallengeData() {
+            localStorage.setItem('quantumLeapChallenge', JSON.stringify(challengeData));
+        }
+
+        // ========== DAY PROGRESSION LOGIC ========== //
+        function checkDayProgression() {
+            const now = new Date();
+            const startDate = new Date(challengeData.startDate);
+            
+            // Calculate days passed since start
+            const timeDiff = now - startDate;
+            const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            
+            // Update current day if needed
+            if (daysPassed + 1 > challengeData.currentDay && challengeData.currentDay < 21) {
+                // Mark previous day as failed if not completed
+                if (!challengeData.completedDays.includes(challengeData.currentDay)) {
+                    challengeData.failedDays.push(challengeData.currentDay);
+                }
+                
+                // Reset core habits for new day
+                resetCoreHabits();
+                
+                // Move to next day
+                challengeData.currentDay = Math.min(daysPassed + 1, 21);
+                saveChallengeData();
+            }
+        }
+
+        function resetCoreHabits() {
+            for (const habit in challengeData.coreHabits) {
+                challengeData.coreHabits[habit].completed = false;
+                challengeData.coreHabits[habit].failed = false;
+            }
+        }
+
+        // ========== RENDER CHALLENGE UI ========== //
+        function renderChallenge() {
+            renderDayPills();
+            renderCoreHabits();
+            renderCurrentDayTask();
+            updateProgressCircle();
+            updateDailyQuote();
+        }
+
+        function renderDayPills() {
+            const daysGrid = document.getElementById('daysGrid');
+            daysGrid.innerHTML = '';
+            
+            for (let day = 1; day <= 21; day++) {
+                const dayPill = document.createElement('div');
+                dayPill.className = 'day-pill';
+                dayPill.textContent = day;
+                
+                if (day < challengeData.currentDay) {
+                    if (challengeData.completedDays.includes(day)) {
+                        dayPill.classList.add('completed');
+                    } else if (challengeData.failedDays.includes(day)) {
+                        dayPill.classList.add('failed');
+                    }
+                } else if (day === challengeData.currentDay) {
+                    dayPill.classList.add('current');
+                } else {
+                    dayPill.classList.add('locked');
+                }
+                
+                dayPill.addEventListener('click', () => {
+                    if (day <= challengeData.currentDay) {
+                        showDayTask(day);
+                    }
+                });
+                
+                daysGrid.appendChild(dayPill);
+            }
+        }
+
+        function renderCoreHabits() {
+            const coreItems = document.querySelectorAll('.core-item');
+            coreItems.forEach(item => {
+                const habit = item.dataset.habit;
+                const habitData = challengeData.coreHabits[habit];
+                
+                if (habitData.completed) {
+                    item.classList.add('completed');
+                    item.classList.remove('failed');
+                } else if (habitData.failed) {
+                    item.classList.add('failed');
+                    item.classList.remove('completed');
+                } else {
+                    item.classList.remove('completed', 'failed');
+                }
+            });
+        }
+
+        function renderCurrentDayTask() {
+            const currentDayTask = document.getElementById('currentDayTask');
+            const day = challengeData.currentDay;
+            
+            currentDayTask.innerHTML = `
+                <div class="task-header">
+                    <h3 class="task-title">🔥 DAILY BONUS CHALLENGE</h3>
+                    <span class="task-day">Day ${day}</span>
+                </div>
+                <p class="task-description">
+                    <strong>${challengeData.dailyChallenges[day - 1]}</strong><br><br>
+                    Complete this challenge along with your core habits to progress.
+                </p>
+                <div class="task-actions">
+                    <button class="task-btn" id="completeDayBtn">Complete Day ${day}</button>
+                    <div class="task-toggle" id="dayToggle"></div>
+                </div>
+            `;
+            
+            // Set toggle state
+            const dayToggle = document.getElementById('dayToggle');
+            if (challengeData.completedDays.includes(day)) {
+                dayToggle.classList.add('active');
+            } else if (challengeData.failedDays.includes(day)) {
+                dayToggle.classList.add('failed');
+            }
+        }
+
+        function showDayTask(day) {
+            const currentDayTask = document.getElementById('currentDayTask');
+            
+            if (day === challengeData.currentDay) {
+                renderCurrentDayTask();
+            } else {
+                currentDayTask.innerHTML = `
+                    <div class="task-header">
+                        <h3 class="task-title">🔥 DAILY BONUS CHALLENGE</h3>
+                        <span class="task-day">Day ${day}</span>
+                    </div>
+                    <p class="task-description">
+                        <strong>${challengeData.dailyChallenges[day - 1]}</strong><br><br>
+                        ${challengeData.completedDays.includes(day) ? 
+                            '✅ You completed this challenge!' : 
+                          challengeData.failedDays.includes(day) ?
+                            '❌ You missed this day.' :
+                            'This day is not yet available.'}
+                    </p>
+                    <div class="task-actions">
+                        <div class="task-toggle ${challengeData.completedDays.includes(day) ? 'active' : 
+                                               challengeData.failedDays.includes(day) ? 'failed' : ''}"></div>
+                    </div>
+                `;
+            }
+            
+            currentDayTask.classList.add('active');
+        }
+
+        function updateProgressCircle() {
+            const daysLeft = document.getElementById('daysLeft');
+            const progress = Math.floor((challengeData.completedDays.length / 21) * 100);
+            
+            daysLeft.textContent = 21 - challengeData.currentDay + 1;
+            
+            const circularBg = document.querySelector('.circular-bg');
+            circularBg.style.background = `conic-gradient(var(--success) ${progress}%, var(--toggle-bg) ${progress}%)`;
+        }
+
+        function updateDailyQuote() {
+            const dailyQuote = document.getElementById('dailyQuote');
+            dailyQuote.textContent = challengeData.dailyQuotes[challengeData.currentDay - 1];
+        }
+
+        // ========== EVENT HANDLERS ========== //
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Core habit toggles
+            const coreItems = document.querySelectorAll('.core-item');
+            coreItems.forEach(item => {
+                item.addEventListener('click', () => toggleCoreHabit(item));
+            });
+            
+            // Complete day button (delegated since it's dynamically created)
+            document.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'completeDayBtn') {
+                    completeCurrentDay();
+                }
+            });
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Light Mode</span>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Dark Mode</span>';
+            }
+        }
+
+        function toggleCoreHabit(item) {
+            const habit = item.dataset.habit;
+            const habitData = challengeData.coreHabits[habit];
+            
+            if (item.classList.contains('completed')) {
+                // Mark as incomplete
+                item.classList.remove('completed');
+                habitData.completed = false;
+            } else if (item.classList.contains('failed')) {
+                // Mark as completed
+                item.classList.remove('failed');
+                item.classList.add('completed');
+                habitData.completed = true;
+                habitData.failed = false;
+            } else {
+                // Mark as completed
+                item.classList.add('completed');
+                habitData.completed = true;
+            }
+            
+            saveChallengeData();
+        }
+
+        function completeCurrentDay() {
+            const day = challengeData.currentDay;
+            
+            // Check if all core habits are completed
+            const allHabitsCompleted = Object.values(challengeData.coreHabits).every(
+                habit => habit.completed
+            );
+            
+            if (!allHabitsCompleted) {
+                alert('Complete all 5 core habits first!');
+                return;
+            }
+            
+            // Mark day as completed
+            if (!challengeData.completedDays.includes(day)) {
+                challengeData.completedDays.push(day);
+            }
+            
+            // Remove from failed days if it was there
+            challengeData.failedDays = challengeData.failedDays.filter(d => d !== day);
+            
+            // Show celebration
+            showCelebration();
+            
+            // Move to next day if not at the end
+            if (day < 21) {
+                setTimeout(() => {
+                    challengeData.currentDay++;
+                    resetCoreHabits();
+                    saveChallengeData();
+                    renderChallenge();
+                }, 3000);
+            } else {
+                // Challenge completed!
+                document.getElementById('celebrationTitle').innerHTML = 'CHALLENGE COMPLETED! <i class="fas fa-trophy"></i>';
+                document.getElementById('celebrationText').textContent = 'You\'ve successfully transformed yourself over 21 days!';
+            }
+            
+            saveChallengeData();
+            renderChallenge();
+        }
+
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('active');
+            
+            setTimeout(() => {
+                celebration.classList.remove('active');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
